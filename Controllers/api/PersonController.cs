@@ -15,4 +15,9 @@ public class PersonController : ControllerBase{
         };
         return poeples;
     }
+
+    [HttpGet(Name = "person/{lastName}")]
+    public Person GetPeople(String lastName){
+        return new Person( lastName, new DateOnly(2023,01,01));
+    }
 }
