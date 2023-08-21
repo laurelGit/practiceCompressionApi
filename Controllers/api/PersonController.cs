@@ -5,6 +5,11 @@ namespace App.Controllers;
 [ApiController]
 [Route("api/person")]
 public class PersonController : ControllerBase{
+    private readonly PersonContext _dbContext;
+    public PersonController(PersonContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
 
     private static readonly List<Person> peoples = new List<Person>();
 
@@ -28,8 +33,10 @@ public class PersonController : ControllerBase{
 
     [HttpPost("add/{lastName}")]
     public Person AddPeople(String lastName){
-        var newPerson = new Person(Guid.NewGuid(), lastName, DateOnly.FromDateTime(DateTime.UtcNow));
+        Person newPerson = new Person(Guid.NewGuid(), lastName, DateOnly.FromDateTime(DateTime.UtcNow));
         peoples.Add(newPerson);
+        _dbContext.People.Add(newPerson);
+        _dbContext.SaveChanges();
         return newPerson;
     }
 }
