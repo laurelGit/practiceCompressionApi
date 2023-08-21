@@ -6,18 +6,30 @@ namespace App.Controllers;
 [Route("api/person")]
 public class PersonController : ControllerBase{
 
+    private static readonly List<Person> peoples = new List<Person>();
+
     [HttpGet]
-    public Person[] List(){
-        Person[] poeples = new Person[]{
-            new Person( "Michel", new DateOnly(2023,01,01)),
-            new Person( "Wilfried", new DateOnly(2023,01,01)),
-            new Person( "Laurel", new DateOnly(2023,01,01)),
-        };
-        return poeples;
+    public Person[] List() => peoples.ToArray();
+
+    [HttpGet("{id}")]
+    public Person GetPeople(Guid id)
+    {
+        try
+        {
+            var person = peoples.Find(elt => elt.Id.Equals(id));
+            _ = person ?? throw new ArgumentNullException("People is null");
+            return person;
+        }
+        catch (System.Exception)
+        {
+            return new Person(Guid.Empty, $"No Name Found with id : {id}", DateOnly.FromDateTime(DateTime.UtcNow));
+        }
     }
 
-    [HttpGet("{lastName}")]
-    public Person GetPeople(String lastName){
-        return new Person( lastName, new DateOnly(2023,01,01));
+    [HttpPost("add/{lastName}")]
+    public Person AddPeople(String lastName){
+        var newPerson = new Person(Guid.NewGuid(), lastName, DateOnly.FromDateTime(DateTime.UtcNow));
+        peoples.Add(newPerson);
+        return newPerson;
     }
 }
