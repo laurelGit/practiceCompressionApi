@@ -1,3 +1,4 @@
+using App.Classes;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.Models;
@@ -9,5 +10,5 @@ public class PersonContext : DbContext
     {
     }
 
-    public DbSet<Person> Peoples { get; set; }
+    public DbSet<Person> Persons { get; set; }
 }

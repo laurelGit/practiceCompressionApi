@@ -3,10 +3,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace App.Classes;
 
 public class Person{
-    [key]
+    [Key]
     private Guid Id { get; set; }
-    [required]
+    public Guid GetId(){
+        return Id;
+    }
+    public void SetId(Guid Id){
+        this.Id = Id;
+    }
+    [Required]
     private String Name {get; set;}
+    public String GetName(){
+        return Name;
+    }
+    public void SetName(String Name){
+        this.Name = Name;
+    }
     [Column(TypeName="date")]
     private DateOnly DateNaiss { get; set; }
     public Person(Guid id, String name, DateOnly DateNaiss){

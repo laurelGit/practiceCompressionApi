@@ -1,3 +1,5 @@
+using App.Classes;
+using App.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.Controllers;
@@ -21,7 +23,8 @@ public class PersonController : ControllerBase{
     {
         try
         {
-            var person = peoples.Find(elt => elt.Id.Equals(id));
+            var person = _dbContext.Persons.Find((elt) => { return elt.GetId().Equals(id);});
+            var person2 = peoples.Find((elt) => { return elt.GetId().Equals(id);});
             _ = person ?? throw new ArgumentNullException("People is null");
             return person;
         }
@@ -35,7 +38,7 @@ public class PersonController : ControllerBase{
     public Person AddPeople(String lastName){
         Person newPerson = new Person(Guid.NewGuid(), lastName, DateOnly.FromDateTime(DateTime.UtcNow));
         peoples.Add(newPerson);
-        _dbContext.People.Add(newPerson);
+        _dbContext.Persons.Add(newPerson);
         _dbContext.SaveChanges();
         return newPerson;
     }
